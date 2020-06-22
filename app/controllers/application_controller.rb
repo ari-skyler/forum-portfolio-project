@@ -14,6 +14,9 @@ class ApplicationController < Sinatra::Base
   end
 
   helpers do
+    def slugify(string)
+      string.gsub(" ", "-")
+    end
     def is_logged_in?
       !!session[:user_id]
     end
