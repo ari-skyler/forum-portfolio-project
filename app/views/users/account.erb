@@ -1,0 +1,17 @@
+<h2>Welcome, <%= @user.first_name %></h2>
+<p><form action="/logout" method="post">
+  <input type="submit" value="Logout">
+</form></p>
+<p>Username: <%= @user.username %></p>
+<p>Email: <%= @user.email %></p>
+<form action="/users/<%= @user.username %>/update" method="post">
+  <p>Link: <input type="text" name="link" value="<%= @user.link %>">
+  <input type="hidden" name="_method" value="PATCH">
+  <input type="submit" value="Save Link"></p>
+</form>
+<form action="/users/<%= @user.username %>/update" method="post">
+  <p>Bio: 
+  <textarea name="bio"><%= @user.bio %></textarea>
+  <input type="hidden" name="_method" value="PATCH"><br>
+  <input type="submit" value="Save Bio"></p>
+</form>

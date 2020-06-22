@@ -1,7 +1,12 @@
 class UsersController < ApplicationController
   get '/users/:username' do
-    @user = User.find_by(username: params[:username])
-    erb :'/users/account'
+    if is_logged_in?
+      @user = User.find_by(username: params[:username])
+      erb :'/users/account'
+    else
+      @user = User.find_by(username: params[:username])
+      erb :'/users/show'
+    end
   end
   get '/signup' do
     if !is_logged_in?
@@ -27,7 +32,11 @@ class UsersController < ApplicationController
     end
   end
   post '/login' do
-    user = User.find_by(username: params[:username])
+    if params[:username].include?("@")
+      user = User.find_by(email: params[:username])
+    else
+      user = User.find_by(username: params[:username])
+    end
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
       redirect to '/'
@@ -46,5 +55,17 @@ class UsersController < ApplicationController
   post '/logout' do
     session.clear
     redirect to '/login'
+  end
+  patch '/users/:username/update' do
+    user = User.find_by(username: params[:username])
+    if !params[:link].blank?
+      user.update(link: params[:link])
+      redirect '/users/' + user.username
+    elsif !params[:bio].blank?
+      user.update(bio: params[:bio])
+      redirect '/users/' + user.username
+    else
+      redirect '/users/' + user.username
+    end
   end
 end
