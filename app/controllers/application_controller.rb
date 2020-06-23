@@ -18,7 +18,22 @@ class ApplicationController < Sinatra::Base
   end
   helpers do
     def slugify(string)
-      string.gsub(" ", "-")
+      slug = string.downcase.gsub(" ", "-")
+      i = 1
+      t = true
+      while t
+        if i == 2
+          slug = slug + "-" + i.to_s
+        elsif i > 2
+          slug[-1] = i.to_s
+        end
+        post = Post.find_by(slug: slug)
+        if !post
+          t = false
+        end
+        i+=1
+      end
+      return slug
     end
     def is_logged_in?
       !!session[:user_id]
