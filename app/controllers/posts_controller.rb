@@ -22,12 +22,16 @@ class PostsController < ApplicationController
   # GET: /posts/slug
   get "/posts/:slug" do
     @post = Post.find_by(slug: params[:slug])
-    if current_user.id == @post.user_id
-      @belongs_to_current_user = true
+    if @post
+      if current_user.id == @post.user_id
+        @belongs_to_current_user = true
+      else
+        @belongs_to_current_user = false
+      end
+      erb :"/posts/show"
     else
-      @belongs_to_current_user = false
+      erb:'/oops'
     end
-    erb :"/posts/show"
   end
   # GET: /posts/5/edit
   get "/posts/:id/edit" do

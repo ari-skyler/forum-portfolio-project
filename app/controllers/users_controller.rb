@@ -1,11 +1,14 @@
 class UsersController < ApplicationController
   get '/users/:username' do
-    if is_logged_in?
-      @user = User.find_by(username: params[:username])
-      erb :'/users/account'
+    @user = User.find_by(username: params[:username])
+    if @user
+      if params[:username] == current_user && is_logged_in?
+        erb :'/users/account'
+      else
+        erb :'/users/show'
+      end
     else
-      @user = User.find_by(username: params[:username])
-      erb :'/users/show'
+      erb :oops
     end
   end
   get '/signup' do

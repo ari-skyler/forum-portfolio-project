@@ -12,7 +12,10 @@ class ApplicationController < Sinatra::Base
   get "/" do
     erb :welcome
   end
-
+  not_found do
+    status 404
+    erb :oops
+  end
   helpers do
     def slugify(string)
       string.gsub(" ", "-")
