@@ -22,33 +22,34 @@ class PostsController < ApplicationController
   # GET: /posts/slug
   get "/posts/:slug" do
     @post = Post.find_by(slug: params[:slug])
+    @comments = @post.comments
     if @post
-      if current_user.id == @post.user_id
-        @belongs_to_current_user = true
-      else
-        @belongs_to_current_user = false
-      end
       erb :"/posts/show"
     else
       erb:'/oops'
     end
   end
   # GET: /posts/5/edit
-  get "/posts/:id/edit" do
-    @post = Post.find_by_id(params[:id])
+  get "/posts/:slug/edit" do
+    @post = Post.find_by(slug: params[:slug])
     erb :"/posts/edit"
   end
   # PATCH: /posts/5
-  patch "/posts/:id" do
-    post = Post.find_by_id(params[:id])
-    params[:slug] = slugify(params[:title])
-    params.delete("_method")
-    post.update(params)
+  patch "/posts/:slug" do
+    post = Post.find_by(slug: params[:slug])
+    if post.user_id == current_user.id
+      params[:slug] = slugify(params[:title])
+      params.delete("_method")
+      post.update(params)
+    end
     redirect "/posts/" + post.slug
   end
   # DELETE: /posts/5/delete
   delete "/posts/:id/delete" do
-    Post.destroy(params[:id])
+    post = Post.find_by_id(params[:id])
+    if post.user_id == current_user.id
+      post.destroy
+    end
     redirect "/posts"
   end
 end
