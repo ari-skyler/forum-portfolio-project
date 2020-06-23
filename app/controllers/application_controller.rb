@@ -42,7 +42,9 @@ class ApplicationController < Sinatra::Base
       User.find_by_id(session[:user_id])
     end
     def belongs_to_current_user(object)
-      !!(current_user.id == object.user_id)
+      if current_user
+        !!(current_user.id == object.user_id)
+      end
     end
   end
 end

@@ -4,7 +4,7 @@
   <a href="/posts/<%= @post.slug %>/edit">Edit Post</a>
 <% end %><br>
 <h3>Post a comment:</h3>
-<form action="/comments/<%= @post.id %>" method="post">
+<form action="/comments/post/<%= @post.id %>" method="post">
   <textarea name="content" placeholder="Comment"></textarea>
   <input type="submit" value="Post">
 </form><br>

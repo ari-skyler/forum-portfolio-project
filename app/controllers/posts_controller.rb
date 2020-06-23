@@ -32,7 +32,11 @@ class PostsController < ApplicationController
   # GET: /posts/5/edit
   get "/posts/:slug/edit" do
     @post = Post.find_by(slug: params[:slug])
-    erb :"/posts/edit"
+    if belongs_to_current_user(@post)
+      erb :"/posts/edit"
+    else
+      erb :oops
+    end
   end
   # PATCH: /posts/5
   patch "/posts/:slug" do
