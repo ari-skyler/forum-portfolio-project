@@ -12,7 +12,7 @@ class PostsController < ApplicationController
   post "/posts" do
     if is_logged_in? && !params[:title].blank? && !params[:content].blank?
       params[:slug] = slugify(params[:title])
-      params[:content] = undelta(params[:content])
+      params[:content] = remove_html_tags(undelta(params[:content]))
       params[:user_id] = current_user.id
       Post.create(params)
       redirect "/posts"

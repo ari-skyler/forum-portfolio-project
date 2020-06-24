@@ -33,8 +33,11 @@
   h1 {
     font-size: 36px;
     line-height: 54px;
+    color:black;
   }
-
+  a{
+    text-decoration: none !important;
+  }
   h2 {
     border-bottom: 2px solid #ccc;
     font-size: 24px;
