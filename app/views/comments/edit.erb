@@ -1,7 +1,7 @@
 <h1><%= @comment.post.title %></h1>
 <h2>Edit your comment:</h2>
 <form action="/comments/<%= @comment.id %>" method="post">
-  <input name="content" type="hidden">
+  <input name="delta" type="hidden">
       <div id="editor"><%= @comment.content %></div>
   <input type="hidden" name="_method" value="PATCH">
   <input type="submit" value="Update">
@@ -10,6 +10,7 @@
   <input type="hidden" name="_method" value="DELETE">
   <input type="submit" value="Delete Comment">
 </form>
+<a href="/posts/<%= @comment.post.slug %>"><button class="form-button">Cancel</button></a>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
   var toolbarOptions = [['bold', 'italic', 'underline'], ['link']]
@@ -21,7 +22,7 @@
   var form = document.querySelector('form');
   form.onsubmit = function() {
   // Populate hidden form on submit
-  var content = document.querySelector('input[name=content]');
+  var content = document.querySelector('input[name=delta]');
   content.value = JSON.stringify(quill.getContents());
   return true;
 };

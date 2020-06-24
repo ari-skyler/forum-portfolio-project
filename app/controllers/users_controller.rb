@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   get '/users/:username' do
     @user = User.find_by(username: params[:username])
     if @user
-      if params[:username] == current_user && is_logged_in?
+      if @user == current_user && is_logged_in?
         erb :'/users/account'
       else
         erb :'/users/show'
@@ -19,12 +19,17 @@ class UsersController < ApplicationController
     end
   end
   post '/signup' do
-    user = User.new(params)
-    if user.save
-      session[:user_id] = user.id
-      redirect to '/'
+    if validate_input(params) == true
+      user = User.new(params)
+      if user.save
+        session[:user_id] = user.id
+        redirect to '/'
+      else
+        redirect '/signup'
+      end
     else
-      redirect '/signup'
+      @message = validate_input(params)[1]
+      erb :'/users/signup'
     end
   end
   get '/login' do
@@ -61,14 +66,33 @@ class UsersController < ApplicationController
   end
   patch '/users/:username/update' do
     user = User.find_by(username: params[:username])
-    if !params[:link].blank?
+    if !!params[:link]
       user.update(link: params[:link])
       redirect '/users/' + user.username
-    elsif !params[:bio].blank?
-      user.update(bio: params[:bio])
+    elsif !!params[:bio]
+      user.update(delta: params[:delta])
       redirect '/users/' + user.username
     else
       redirect '/users/' + user.username
+    end
+  end
+  helpers do
+    def validate_input(params)
+      if params.values.any?(&:blank?)
+        return false, "You need to fill out all fields."
+      elsif !alphanumeric?(params[:pre_username])
+        return false, "Username should be alphanumeric only"
+      elsif User.find_by(username: params[:pre_username].downcase)
+        return false, "Username: '#{params[:pre_username]}' is already taken"
+      elsif User.find_by(email: params[:email].downcase)
+        return false, "There is already an account with the email: '#{params[:email]}'."
+      elsif params[:password].length < 6
+        return false, "Password should be 6 characters or more."
+      elsif params[:password] != params[:confirm_password]
+        return false, "Passwords do not match"
+      else
+        return true
+      end
     end
   end
 end

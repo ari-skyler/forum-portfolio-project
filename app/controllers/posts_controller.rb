@@ -1,8 +1,12 @@
 class PostsController < ApplicationController
   # GET: /posts
   get "/posts" do
-    @posts = Post.all
-    erb :"/posts/index"
+    if is_logged_in?
+      @posts = Post.all.reverse
+      erb :"/posts/index"
+    else
+      redirect '/login'
+    end
   end
   # GET: /posts/new
   get "/posts/new" do
@@ -10,11 +14,8 @@ class PostsController < ApplicationController
   end
   # POST: /posts
   post "/posts" do
-    if is_logged_in? && !params[:title].blank? && !params[:content].blank?
-      params[:slug] = slugify(params[:title])
-      params[:content] = undelta(params[:content])
-      params[:user_id] = current_user.id
-      Post.create(params)
+    if is_logged_in? && !params[:raw_title].blank? && !params[:delta].blank?
+      current_user.posts.create(params)
       redirect "/posts"
     else
       redirect "/posts"
@@ -24,7 +25,6 @@ class PostsController < ApplicationController
   get "/posts/:slug" do
     @post = Post.find_by(slug: params[:slug])
     if @post
-      @comments = @post.comments
       erb :"/posts/show"
     else
       erb:'/oops'
@@ -42,10 +42,7 @@ class PostsController < ApplicationController
   # PATCH: /posts/5
   patch "/posts/:slug" do
     post = Post.find_by(slug: params[:slug])
-    if post.user_id == current_user.id
-      params[:slug] = slugify(params[:title])
-      params[:content] = undelta(params[:content])
-      params.delete("_method")
+    if belongs_to_current_user(post)
       post.update(params)
     end
     redirect "/posts/" + post.slug
@@ -53,7 +50,8 @@ class PostsController < ApplicationController
   # DELETE: /posts/5/delete
   delete "/posts/:id/delete" do
     post = Post.find_by_id(params[:id])
-    if post.user_id == current_user.id
+    if belongs_to_current_user(post)
+      post.comments.destroy_all
       post.destroy
     end
     redirect "/posts"

@@ -1,7 +1,7 @@
 <h1>New Post</h1>
 <form action="/posts" method="post">
-  <input type="text" name="title" placeholder="Post Title">
-  <input name="content" type="hidden">
+  <input type="text" name="raw_title" placeholder="Post Title">
+  <input name="delta" type="hidden">
       <div id="editor">
       </div>
   <input type="submit" value="Post">
@@ -18,7 +18,7 @@
   var form = document.querySelector('form');
   form.onsubmit = function() {
   // Populate hidden form on submit
-  var content = document.querySelector('input[name=content]');
+  var content = document.querySelector('input[name=delta]');
   content.value = JSON.stringify(quill.getContents());
   return true;
 };

@@ -9,4 +9,5 @@ ActiveRecord::Base.establish_connection(
 )
 
 require './app/controllers/application_controller'
+require './lib/concerns/data_formatting'
 require_all 'app'

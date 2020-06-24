@@ -6,13 +6,13 @@
 <hr>
 <h3>Post a comment:</h3>
 
-<form id="comments" action="/comments/post/<%= @post.id %>" method="post">
-  <input name="content" type="hidden">
+<form id="comments" action="/post/<%= @post.id %>/comments" method="post">
+  <input name="delta" type="hidden">
       <div id="editor"></div>
   <input type="submit" value="Post">
 </form>
 <div class="comments">
-<% @comments.each do |comment| %>
+<% @post.comments.each do |comment| %>
 <hr>
   <div class="comment">
   <a href="/users/<%= comment.user.username %>"><h3><%= comment.user.username %></h3></a>
@@ -35,7 +35,7 @@
   var form = document.querySelector('form');
   form.onsubmit = function() {
   // Populate hidden form on submit
-  var content = document.querySelector('input[name=content]');
+  var content = document.querySelector('input[name=delta]');
   content.value = JSON.stringify(quill.getContents());
   return true;
 };

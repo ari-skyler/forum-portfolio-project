@@ -1,11 +1,9 @@
 class CommentsController < ApplicationController
   # POST: /comments
-  post "/comments/post/:post_id" do
+  post "/post/:post_id/comments" do
     post = Post.find_by_id(params[:post_id])
-    if post && is_logged_in?
-      params[:user_id] = current_user.id
-      params[:content] = undelta(params[:content])
-      comment = Comment.create(params)
+    if post && is_logged_in? && !params[:delta].empty?
+      current_user.comments.create(params)
     end
     redirect "/posts/" + post.slug
   end
@@ -20,9 +18,8 @@ class CommentsController < ApplicationController
   # PATCH: /comments/5
   patch "/comments/:id" do
     comment = Comment.find_by_id(params[:id])
-    params[:content] = undelta(params[:content])
     if belongs_to_current_user(comment)
-      comment.update(content: params[:content])
+      comment.update(delta: params[:delta])
     end
     redirect '/posts/' + comment.post.slug
   end

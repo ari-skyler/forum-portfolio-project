@@ -1,12 +1,12 @@
 <h1>Edit Post</h1>
 <form action="/posts/<%= @post.slug %>" method="post">
-  <input type="text" name="title" value="<%= @post.title %>">
-  <input name="content" type="hidden">
+  <input type="text" name="raw_title" value="<%= @post.title %>">
+  <input name="delta" type="hidden">
       <div id="editor">
         <%= @post.content %>
       </div>
   <input type="hidden" name="_method" value="PATCH">
-  <input type="submit" value="Post">
+  <input type="submit" value="Update Post">
 </form>
 <form action="/posts/<%= @post.id %>/delete" method="post">
   <input type="hidden" name="_method" value="DELETE">
@@ -24,7 +24,7 @@
   var form = document.querySelector('form');
   form.onsubmit = function() {
   // Populate hidden form on submit
-  var content = document.querySelector('input[name=content]');
+  var content = document.querySelector('input[name=delta]');
   content.value = JSON.stringify(quill.getContents());
   return true;
 };

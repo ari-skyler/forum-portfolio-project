@@ -1,5 +1,9 @@
 <h1>Welcome to the forum!</h1>
+<form action="/logout" method="post">
+  <input type="submit" value="Logout">
+</form>
 <a href="/posts/new"><button>New Post</button></a>
+<a href="/users/<%= current_user.username %>"><button>Your Account</button></a>
 <% @posts.each do |post| %>
   <div class="post">
   <a href="/posts/<%= post.slug %>"><h2><%= post.title %></h2></a>

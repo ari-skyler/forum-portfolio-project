@@ -1,17 +1,34 @@
-<h2>Welcome, <%= @user.first_name %></h2>
-<p><form action="/logout" method="post">
+<h1>Welcome, <%= @user.first_name %></h1>
+<form action="/logout" method="post">
   <input type="submit" value="Logout">
-</form></p>
+</form>
 <p>Username: <%= @user.username %></p>
 <p>Email: <%= @user.email %></p>
 <form action="/users/<%= @user.username %>/update" method="post">
   <p>Link: <input type="text" name="link" value="<%= @user.link %>">
   <input type="hidden" name="_method" value="PATCH">
   <input type="submit" value="Save Link"></p>
-</form>
-<form action="/users/<%= @user.username %>/update" method="post">
-  <p>Bio: 
-  <textarea name="bio"><%= @user.bio %></textarea>
+</form><br><br>
+<form id="bio" action="/users/<%= @user.username %>/update" method="post">
+  <p>Bio:
+    <input name="bio" type="hidden">
+        <div id="editor"><%= @user.bio %></div>
   <input type="hidden" name="_method" value="PATCH"><br>
   <input type="submit" value="Save Bio"></p>
 </form>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+  var toolbarOptions = [['bold', 'italic', 'underline'], ['link']]
+  var quill = new Quill('#editor', {
+    placeholder: "Add a Bio...",
+    theme: 'snow',
+    modules: {toolbar: toolbarOptions}
+  });
+  var form = document.querySelector('#bio');
+  form.onsubmit = function() {
+  // Populate hidden form on submit
+  var content = document.querySelector('input[name=bio]');
+  content.value = JSON.stringify(quill.getContents());
+  return true;
+};
+</script>
