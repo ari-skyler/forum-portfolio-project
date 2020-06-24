@@ -12,7 +12,7 @@ class PostsController < ApplicationController
   post "/posts" do
     if is_logged_in? && !params[:title].blank? && !params[:content].blank?
       params[:slug] = slugify(params[:title])
-      params[:content] = remove_html_tags(undelta(params[:content]))
+      params[:content] = undelta(params[:content])
       params[:user_id] = current_user.id
       Post.create(params)
       redirect "/posts"
@@ -23,8 +23,8 @@ class PostsController < ApplicationController
   # GET: /posts/slug
   get "/posts/:slug" do
     @post = Post.find_by(slug: params[:slug])
-    @comments = @post.comments
     if @post
+      @comments = @post.comments
       erb :"/posts/show"
     else
       erb:'/oops'

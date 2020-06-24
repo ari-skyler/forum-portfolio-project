@@ -57,7 +57,7 @@ class ApplicationController < Sinatra::Base
         elsif !!entries[i + 1] && !!entries[i + 1]["attributes"] && entries[i]["insert"] && entries[i + 1]["attributes"]["list"]
             content = ""
             if !!entries[i + 1] && !!entries[i + 1]["attributes"]
-              if !entries[i - 1]["attributes"]["list"]
+              if !!entries[i - 1] && !!entries[i - 1]["attributes"] && !entries[i - 1]["attributes"]["list"]
                 content << "<ul><li>#{entries[i]["insert"]}</li>"
               elsif !!entries[i + 3] && !!entries[i + 3]["attributes"] && !entries[i + 3]["attributes"]["list"]
                   content << "<li>#{entries[i]["insert"]}</li></ul>"
@@ -69,8 +69,8 @@ class ApplicationController < Sinatra::Base
             end
 
         elsif entries[i]["insert"] && entries[i]["attributes"] && !(!!entries[i]["attributes"]["list"] || (!!entries[i + 1] && !!entries[i + 1]["attributes"] && !!entries[i + 1]["attributes"]["list"])) && !entries[i]["insert"].empty?
-          open = "<p>"
-          close = ["</p>"]
+          open = ""
+          close = []
           if entries[i]["attributes"]["bold"]
             open << "<b>"
             close << "</b>"
@@ -85,12 +85,12 @@ class ApplicationController < Sinatra::Base
           end
           content = open + entries[i]["insert"] + close.reverse().join("")
         else
-          content = "<p>#{entries[i]["insert"]}</p>"
+          content = entries[i]["insert"]
         end
           html << content
         i+=1
       end
-      html.gsub("\n", "").gsub("<p></p>","")
+      html.gsub("\n", "<br>").gsub("<p></p>","")
     end
   end
 end
