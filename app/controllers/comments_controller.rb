@@ -4,6 +4,7 @@ class CommentsController < ApplicationController
     post = Post.find_by_id(params[:post_id])
     if post && is_logged_in?
       params[:user_id] = current_user.id
+      params[:content] = undelta(params[:content])
       comment = Comment.create(params)
     end
     redirect "/posts/" + post.slug
@@ -19,6 +20,7 @@ class CommentsController < ApplicationController
   # PATCH: /comments/5
   patch "/comments/:id" do
     comment = Comment.find_by_id(params[:id])
+    params[:content] = undelta(params[:content])
     if belongs_to_current_user(comment)
       comment.update(content: params[:content])
     end

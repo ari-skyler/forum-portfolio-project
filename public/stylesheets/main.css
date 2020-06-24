@@ -1,7 +1,7 @@
 @media screen {
   /* --- Reset Styles --- */
   * {
-    list-style: none;
+    list-style: disc;
     margin: 0;
     padding: 0;
   }
@@ -81,6 +81,7 @@
     margin-top: 20px;
     padding-top: 20px;
   }
+
 }
 
 @media screen and (max-width: 600px) {
@@ -112,4 +113,7 @@
     font-size: 18px;
     line-height: 24px;
   }
+}
+ul, ol {
+  margin-left: 20px;
 }
