@@ -20,6 +20,7 @@ class UsersController < ApplicationController
   end
   post '/signup' do
     if validate_input(params) == true
+      params.delete(:confirm_password)
       user = User.new(params)
       if user.save
         session[:user_id] = user.id
