@@ -70,7 +70,7 @@ class UsersController < ApplicationController
     if !!params[:link]
       user.update(link: params[:link])
       redirect '/users/' + user.username
-    elsif !!params[:bio]
+    elsif !!params[:delta]
       user.update(delta: params[:delta])
       redirect '/users/' + user.username
     else

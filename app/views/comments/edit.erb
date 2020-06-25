@@ -1,16 +1,18 @@
+<div class="comment">
 <h1><%= @comment.post.title %></h1>
 <h2>Edit your comment:</h2>
-<form action="/comments/<%= @comment.id %>" method="post">
+<form id="comment" action="/comments/<%= @comment.id %>" method="post">
   <input name="delta" type="hidden">
       <div id="editor"><%= @comment.content %></div>
   <input type="hidden" name="_method" value="PATCH">
-  <input type="submit" value="Update">
+  <input class="green" type="submit" value="Update">
 </form>
 <form action="/comments/<%= @comment.id %>/delete" method="post">
   <input type="hidden" name="_method" value="DELETE">
-  <input type="submit" value="Delete Comment">
+  <input class="red" type="submit" value="Delete Comment">
 </form>
-<a href="/posts/<%= @comment.post.slug %>"><button class="form-button">Cancel</button></a>
+<a href="/posts/<%= @comment.post.slug %>"><button class="red">Cancel</button></a><br>
+</div>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
   var toolbarOptions = [['bold', 'italic', 'underline'], ['link']]
@@ -19,7 +21,7 @@
     theme: 'snow',
     modules: {toolbar: toolbarOptions}
   });
-  var form = document.querySelector('form');
+  var form = document.querySelector('#comment');
   form.onsubmit = function() {
   // Populate hidden form on submit
   var content = document.querySelector('input[name=delta]');

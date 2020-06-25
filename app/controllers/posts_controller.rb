@@ -18,7 +18,7 @@ class PostsController < ApplicationController
       current_user.posts.create(params)
       redirect "/posts"
     else
-      redirect "/posts"
+      redirect "/posts/new"
     end
   end
   # GET: /posts/slug

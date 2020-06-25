@@ -16,7 +16,15 @@
   </head>
   <body>
     <div class="wrapper">
+      <p class="site-title"><a href="/"><img src="/images/site-logo.png" width="100"> Sinatra Forum</a></p>
+      <% if is_logged_in? %>
+      <form action="/logout" method="post">
+        <input type="submit" value="Logout">
+      </form>
 
+      <a href="/posts/new"><button class="green">New Post</button></a>
+      <a href="/users/<%= current_user.username %>"><button>Your Account</button></a>
+      <% end %>
         <%= yield %>
 
       <footer class="branding">

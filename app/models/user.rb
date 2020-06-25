@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_many :posts
   has_many :comments
   def delta=(delta)
-    self.content=(undelta(delta))
+    self.bio=(undelta(delta))
   end
   def pre_username=(string)
     self.username=(string.downcase)

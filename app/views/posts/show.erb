@@ -1,19 +1,22 @@
+<div class="post">
 <h1><%= @post.title %></h1>
+
 <span class="metadata">Posted by: <%= @post.user.username %> | <%= @post.created_at.strftime("%b %d, %Y") %> | <%= @post.comments.count %> Comments <% if belongs_to_current_user(@post) %>
   | <a href="/posts/<%= @post.slug %>/edit">Edit Post</a>
 <% end %></span>
 <div class="post-body"><%= @post.content %></div>
-<hr>
+</div>
+<div class="comments">
+<div class="comment">
 <h3>Post a comment:</h3>
-
 <form id="comments" action="/post/<%= @post.id %>/comments" method="post">
   <input name="delta" type="hidden">
       <div id="editor"></div>
-  <input type="submit" value="Post">
+  <input class="green" type="submit" value="Post">
 </form>
-<div class="comments">
+</div>
 <% @post.comments.each do |comment| %>
-<hr>
+
   <div class="comment">
   <a href="/users/<%= comment.user.username %>"><h3><%= comment.user.username %></h3></a>
   <span class="metadata"><%= @post.created_at.strftime("%b %d, %Y") %>
@@ -32,7 +35,7 @@
     theme: 'snow',
     modules: {toolbar: toolbarOptions}
   });
-  var form = document.querySelector('form');
+  var form = document.querySelector('#comments');
   form.onsubmit = function() {
   // Populate hidden form on submit
   var content = document.querySelector('input[name=delta]');
